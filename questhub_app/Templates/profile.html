@@ -1,0 +1,174 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block title %}
+QuestHub-Home
+{% endblock %}
+
+{% block body %}
+<section id="section1">
+  <div class="container mt-lg-2">
+    {% include 'navbar.html' %}
+  </div>
+  <div class="container">
+    <div class="row">
+      <div class="col-md-4"></div>
+      <div class="col-md-4"></div>
+      <div class="col-md-4">
+        <div id="success-message" class="hide-message">
+            {% for message in messages %}
+            <h6 class="text-success ms-5">{{ message }}</h6>
+            {% endfor %}
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="section2">
+  <div class="container">
+    <div class="row mt-5">
+      <div class="col-md-2"></div>
+      <div class="col-md-8">
+
+        <div class="card shadow p-3 mb-5 bg-body-tertiary rounded" style="max-width: 100%;">
+          <div class="row g-0">
+            <div class="col-md-4 d-flex justify-content-center align-items-center">
+              <img src="{% static 'images/mm1.jpeg' %}" class="img-fluid rounded-circle" alt="Profile Picture">
+            </div>          
+            <div class="col-md-8">
+              <div class="card-body">
+                <h5 class="card-title mb-4" style="font-weight: bold; color: #1a1a1a; font-size: 24px;"> Profile</h5>
+                <p class="card-text" style="color: #333;"><strong>Name:</strong> {{userdata.name}}</p>
+                <p class="card-text" style="color: #333;"><strong>Username:</strong> {{userdata.username}}</p>
+                <p class="card-text" style="color: #333;"><strong>Bio:</strong> {{userdata.bio}}</p>
+                <p class="card-text" style="color: #333;"><strong>Email:</strong> {{userdata.email}}</p>
+                <p class="card-text" style="color: #333;"><strong>Gender:</strong> {{userdata.gender}}</p>
+                <p class="card-text" style="color: #333;"><strong>Phone number:</strong> {{userdata.phone_number}}</p>
+                <p class="card-text" style="color: #333;"><strong>Place:</strong> {{userdata.place}}</p>
+                <a class="btn btn-outline-danger rounded-3" href="{% url 'edit_profile' %}">Edit Profile</a>
+              </div>
+            </div>
+          </div>
+        </div>
+
+      </div>
+      <div class="col-md-2"></div>
+    </div>
+  </div>
+</section>
+
+<section id="section3">
+  <div class="container">
+    <div class="row mt-1 mb-5">
+      <div class="col-lg-2"></div>
+      <div class="col-lg-8">
+        <div class="card shadow mb-5 bg-body-tertiary rounded">
+          <div class="card-header">
+            <ul class="nav nav-pills card-header-pills p-3">
+              <li class="nav-item">
+                <a class="nav-link active" href="#posts">Posts</a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link" href="#answers">Answers</a>
+              </li>
+
+              
+            </ul>
+          </div>
+          
+          <div class="card-body ">
+            <div class="tab-content">
+              <!-- for posts -->
+              {% for question in questions %}
+              <div class="box p-3 " id="#posts">
+                <div class="row ">
+                  <div class="col-11"></div>
+                  <div class="col-1">
+                    <span><i class="fas fa-ellipsis-v "></i></span>
+                  </div>
+                </div>
+              
+                <div class="chip" for="input_field">
+                  <img src="{% static 'images/maamm.jpeg' %}" alt="Person" width="96" height="96">
+                  <span class="text-danger">{{question.user.username}}</span>
+                    
+                </div>
+              
+                <p class="ms-2" style="font-size: small;">Posted on {{question.date}}</p>
+                <h6><strong>{{question.question}}</strong></h6>
+                <div class="row mt-3">
+                  <div class="col-md-6">
+                    {% if question.user.id == user_id  %}
+                    <button class="btn btn-outline-danger btn-sm" disabled><i class="fa fa-pen-alt"></i>Answer</button>
+                    {% else %}
+                    <button type="button" class="btn btn-outline-danger btn-sm" data-bs-toggle="modal" data-bs-target="#answermodal{{question.id}}">
+                      <i class="fa fa-pen-alt"></i>Answer
+                    </button>
+                    {% endif %}
+                  </div>
+                  <div class="col-md-6">
+                    <a href="{% url 'view_answers' question.id %}" style="text-decoration: none;"><button class="btn btn-outline-danger btn-sm">View Answers</button></a>
+                  </div>
+                </div>
+              </div>
+              {% endfor %}
+
+              
+
+            </div>
+          </div>
+          <hr>
+          
+        </div>
+      </div>
+      <div class="col-lg-2"></div>
+    </div>
+  </div>
+
+</section>
+
+
+<style>
+  .nav-link{
+    color: rgb(0, 0, 0);
+  }
+  .nav-link:hover{
+    color: #DC4C64;
+    font-weight: 500;
+  }
+ 
+  .nav-pills .nav-link.active {
+    border-radius: 0%;
+    background-color: transparent;
+    color: #DC4C64;
+    border-bottom: 4px solid  #DC4C64;
+  }
+  .nav-pills .nav-link.active:focus,
+  .nav-pills .nav-link.active:hover {
+    box-shadow: none; /* Remove button box shadow */
+    text-decoration: none; /* Remove button underline on hover */
+  }
+</style>
+<style>
+  .chip {
+      display: inline-block;
+      padding: 0 25px;
+      height: 50px;
+      font-size: 16px;
+      line-height: 50px;
+      border-radius: 25px;
+      background-color: #f1f1f1;
+      text-decoration: none;
+  }
+
+  .chip img {
+      float: left;
+      margin: 0 10px 0 -25px;
+      height: 50px;
+      width: 50px;
+      border-radius: 50%;
+  }
+</style>
+
+
+{% endblock %}

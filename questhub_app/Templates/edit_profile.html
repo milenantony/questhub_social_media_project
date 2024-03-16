@@ -1,0 +1,130 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block title %}
+QuestHub-Home
+{% endblock %}
+
+{% block body %}
+<section id="section1">
+  <div class="container mt-lg-2">
+    {% include 'navbar.html' %}
+  </div>
+
+  <div class="container mt-5">
+    <div class="row justify-content-center">
+      <div class="col-md-8">
+        <div class="card shadow p-3 mb-5 bg-body-tertiary rounded">
+          <div class="card-body">
+            <!-- Form for uploading new profile picture and editing user details -->
+            <form method="post" enctype="multipart/form-data" action="{% url 'edit_profile_save' %}" class="needs-validation" novalidate>
+              {% csrf_token %}
+              <div class="row">
+                <div class="col-4">
+                  <label for="profile_pic" class="form-label">Choose Profile Picture</label>
+                  <input type="file" class="form-control" id="profile_pic" name="profile_pic" onchange="readURL(this);">
+                </div>
+                <div class="col-8">
+                  <img id="preview_profile_pic" src="#" alt="Selected Profile Picture" class="img-fluid rounded-circle mb-1 mt-3" style="display: none; width: 150px;">
+                </div>
+              </div>
+              <!-- <div class="mb-4 text-center"> 
+                <label for="profile_pic" class="form-label">Choose Profile Picture</label>
+                <input type="file" class="form-control" id="profile_pic" name="profile_pic" onchange="readURL(this);">
+                <img id="preview_profile_pic" src="#" alt="Selected Profile Picture" class="img-fluid rounded-circle mb-1 mt-3" style="display: none; width: 150px;">
+              </div> -->
+              <div class="mb-3">
+                <label for="name" class="form-label">Name</label>
+                <input type="text" class="form-control" id="name" name="name" value="{{userdata.name}}">
+              </div>
+              <div class="mb-3">
+                <label for="username" class="form-label">Username</label>
+                <input type="text" class="form-control" id="username" name="username" value="{{userdata.username}}">
+              </div>
+              <div class="mb-3">
+                <label for="bio" class="form-label">Bio</label>
+                <input type="text" class="form-control" id="bio" name="bio" value="{{userdata.bio}}">
+              </div>
+              <div class="mb-3">
+                <label for="email" class="form-label">Email</label>
+                <input type="email" class="form-control" id="email" name="email" value="{{userdata.email}}" pattern="^[^\s@]+@[^\s@]+\.[^\s@]+$"  title="email should be in the format 'sample@gmail.com'" required>
+              </div>
+              <div class="mb-3">
+                <label class="form-label">Gender</label><br>
+                {% if userdata.gender == 'Male' %}
+                <div class="form-check form-check-inline">
+                  <input class="form-check-input" type="radio" name="gender" id="male" value="Male" checked>
+                  <label class="form-check-label" for="male">Male</label>
+                </div>
+                <div class="form-check form-check-inline">
+                  <input class="form-check-input" type="radio" name="gender" id="female" value="female">
+                  <label class="form-check-label" for="female">Female</label>
+                </div>
+                {% else %}
+                <div class="form-check form-check-inline">
+                  <input class="form-check-input" type="radio" name="gender" id="male" value="Male">
+                  <label class="form-check-label" for="male">Male</label>
+                </div>
+                <div class="form-check form-check-inline">
+                  <input class="form-check-input" type="radio" name="gender" id="female" value="female" checked>
+                  <label class="form-check-label" for="female">Female</label>
+                </div>
+                {% endif %}
+              </div>
+              <div class="mb-3">
+                <label for="phone" class="form-label">Phone number</label>
+                <input type="text" class="form-control" id="phone" pattern="[6,7,8,9][0-9]{9}" title="Phone number should be 10 digits" name="phone" value="{{userdata.phone_number}}" required>
+              </div>
+              <div class="mb-3">
+                <label for="place" class="form-label">Place</label>
+                <input type="text" class="form-control" id="place" name="place" value="{{userdata.place}}">
+              </div>
+              <div class="text-center"> <!-- Center the button -->
+                <button type="submit" class="btn btn-outline-danger rounded-3 mt-3">Save Changes</button>
+              </div>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<script>
+  function readURL(input) {
+    if (input.files && input.files[0]) {
+      var reader = new FileReader();
+      
+      reader.onload = function(e) {
+        $('#preview_profile_pic').attr('src', e.target.result).show();
+      }
+      
+      reader.readAsDataURL(input.files[0]); // convert to base64 string
+    }
+  }
+</script>
+
+<script>
+
+  //  Example starter JavaScript for disabling form submissions if there are invalid fields
+  (() => {
+  'use strict'
+  
+  // Fetch all the forms we want to apply custom Bootstrap validation styles to
+  const forms = document.querySelectorAll('.needs-validation')
+  
+  // Loop over them and prevent submission
+  Array.from(forms).forEach(form => {
+    form.addEventListener('submit', event => {
+      if (!form.checkValidity()) {
+        event.preventDefault()
+        event.stopPropagation()
+      }
+  
+      form.classList.add('was-validated')
+    }, false)
+  })
+  })()
+  
+  
+</script>
+{% endblock %}
