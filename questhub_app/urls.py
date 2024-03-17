@@ -18,6 +18,9 @@ urlpatterns = [
     path('profile-save',views.edit_profile_save, name='edit_profile_save'),
     path('filter-today',views.filter_today, name='filter_today'),
     path('filter-myposts',views.filter_myposts, name='filter_myposts'),
+    path('post-delete/<int:pk>/',views.delete_post, name='delete_post'),
+    path('post-edit/<int:pk>/',views.edit_post, name='edit_post'),
+
 
 
 ]

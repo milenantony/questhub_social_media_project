@@ -11,15 +11,19 @@ QuestHub-Home
         {% include 'navbar.html' %}
     </div>
     <div class="container">
-        <div class="row">
+        <div class="row mt-1">
           <div class="col-md-4"></div>
           <div class="col-md-4"></div>
           <div class="col-md-4">
-            <div id="success-message" class="hide-message">
-                {% for message in messages %}
-                <h6 class="text-success ms-5">{{ message }}</h6>
-                {% endfor %}
+            {% for message in messages %}
+            <div class="alert alert-success alert-dismissible fade show animated-alert" role="alert">
+                <strong>Success <i class="fa fa-check-circle"></i></strong> <span class="ms-2">{{message}}</span>
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
             </div>
+            {% endfor %}
+            <!-- <div id="success-message" class="hide-message">
+                <h6 class="text-success ms-5">{{ message }}</h6>
+            </div> -->
           </div>
         </div>
     </div>
@@ -72,9 +76,12 @@ QuestHub-Home
                         </div>
                         
                         <div class="chip" for="input_field">
-                            <img src="{% static 'images/maamm.jpeg' %}" alt="Person" width="96" height="96">
-                            <span class="text-danger">{{question.user.username}}</span>
-                            
+                            {% if question.user.profile_picture %}
+                            <img src="{{ question.user.profile_picture.url }}" alt="Profile Picture" width="96" height="96">
+                            {% else %}
+                            <img src="{% static 'images/dp.jpg' %}" alt="Profile Picture" width="96" height="96">
+                            {% endif %}
+                            <span class="text-danger">{{question.user.username}}</span> 
                         </div>
                         
                         <p class="ms-2" style="font-size: small;">Posted on {{question.date}}</p>
@@ -169,16 +176,7 @@ QuestHub-Home
     }
 </style>
 
-<script>
-    // Show success message and hide it after 2 seconds
-    document.addEventListener("DOMContentLoaded", function () {
-        const successMessage = document.getElementById("success-message");
-        successMessage.style.display = "block";
-        setTimeout(function () {
-            successMessage.style.display = "none";
-        }, 2000); // 2000 milliseconds = 2 seconds
-    });
-</script>
+
 
 <style>
     .chip {
@@ -208,6 +206,28 @@ QuestHub-Home
         border-left: solid 3px red;
     }
     
+
+</style>
+
+<style>
+
+/* CSS for the alert box */
+.animated-alert {
+    animation: slideInFromRight 0.5s ease forwards;
+   
+}
+
+/* Keyframes for the slide-in animation */
+@keyframes slideInFromRight {
+    0% {
+        transform: translateX(100%); /* Start from outside the viewport on the right */
+        opacity: 0;
+    }
+    100% {
+        transform: translateX(0); /* Move to original position */
+        opacity: 1;
+    }
+}
 
 </style>
 

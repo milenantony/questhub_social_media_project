@@ -19,12 +19,15 @@ QuestHub-Home
             <form method="post" enctype="multipart/form-data" action="{% url 'edit_profile_save' %}" class="needs-validation" novalidate>
               {% csrf_token %}
               <div class="row">
+                <div class="col-4"></div>
                 <div class="col-4">
-                  <label for="profile_pic" class="form-label">Choose Profile Picture</label>
+                  <center>
+                    <img id="preview_profile_pic" name="new_profile_pic" src="#" alt="Selected Profile Picture" class="img-fluid rounded"  style="display: none;">
+                  </center>
+                  <p id="editText" class="text-center mt-2 text-danger edit-link">Edit profile picture</p>
                   <input type="file" class="form-control" id="profile_pic" name="profile_pic" onchange="readURL(this);">
                 </div>
-                <div class="col-8">
-                  <img id="preview_profile_pic" src="#" alt="Selected Profile Picture" class="img-fluid rounded-circle mb-1 mt-3" style="display: none; width: 150px;">
+                <div class="col-4">
                 </div>
               </div>
               <!-- <div class="mb-4 text-center"> 
@@ -126,5 +129,20 @@ QuestHub-Home
   })()
   
   
+</script>
+
+<style>
+  /* Hide the file input */
+  #profile_pic {
+    display: none;
+  }
+  .edit-link{
+    cursor: pointer;
+  }
+</style>
+<script>
+  document.getElementById('editText').addEventListener('click', function() {
+    document.getElementById('profile_pic').click(); // Trigger the click event of the file input
+  });
 </script>
 {% endblock %}

@@ -12,6 +12,7 @@ class Registerprofile(models.Model):
     log_time = models.TimeField(auto_now_add=True,null=True,blank=True)
     position = models.CharField(max_length=255,default='User',null=True,blank=True)
     bio=models.TextField(default='',null=True,blank=True)
+    profile_picture=models.ImageField(null=True,blank=True,upload_to='images')
     gender=models.CharField(max_length=50,default='',null=True,blank=True)
     phone_number=models.CharField(max_length=10,default=0,null=True,blank=True)
     place=models.CharField(max_length=254,default='',null=True,blank=True)
@@ -21,8 +22,8 @@ class Registerprofile(models.Model):
 class Questions(models.Model):
     user=models.ForeignKey(Registerprofile,on_delete=models.CASCADE,default='',null=True,blank=True)
     question=models.TextField(null=True,blank=True)
-    date = models.DateField(auto_now_add=True,null=True,blank=True)
-    time = models.TimeField(auto_now_add=True,null=True,blank=True)
+    date = models.DateField(auto_now=True,null=True,blank=True)
+    time = models.TimeField(auto_now=True,null=True,blank=True)
 
 
 class Answer(models.Model):

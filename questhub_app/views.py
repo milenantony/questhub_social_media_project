@@ -153,7 +153,7 @@ def askquestion(request):
             question=request.POST['question']
             data=Questions(user=user,question=question)
             data.save()
-            messages.success(request,'Success')
+            messages.success(request,'Question posted')
             return redirect('index')
 
     else:
@@ -183,7 +183,7 @@ def submit_answer(request,pk):
             answer_text=request.POST['answer_text']
             data=Answer(answer_text=answer_text,user=user,question=question)
             data.save()
-            messages.success(request,'Success')
+            messages.success(request,'Answered')
             return redirect('index')
         
     else:
@@ -294,6 +294,7 @@ def edit_profile_save(request):
         userdata = Registerprofile.objects.get(id=user_id)
 
         if request.POST:
+            new_pic=request.FILES.get('profile_pic')
             phone=request.POST['phone']
             gender=request.POST['gender']
             userdata.name=request.POST['name']
@@ -303,7 +304,9 @@ def edit_profile_save(request):
             userdata.gender=request.POST['gender']
             userdata.phone_number=phone
             userdata.place=request.POST['place']
-            print(phone,gender)
+            if new_pic:
+                userdata.profile_picture=new_pic
+            print(new_pic)
             userdata.save()
             messages.success(request,'Profile Updated')
             return redirect("profilepage")   
@@ -312,4 +315,38 @@ def edit_profile_save(request):
         return redirect('/')
 
 
+def delete_post(request,pk):
+    if 'user_id' in request.session:
+        if request.session.has_key('user_id'):
+            user_id = request.session['user_id']
+           
+        else:
+            return redirect('/')
+        
+        userdata = Registerprofile.objects.get(id=user_id)
+        question=Questions.objects.get(id=pk,user=userdata)
+        question.delete()
+        messages.success(request,'Post Deleted Successfully')
+        return redirect('profilepage')    
+    else:
+        return redirect('/')
+
+def edit_post(request,pk):
+    if 'user_id' in request.session:
+        if request.session.has_key('user_id'):
+            user_id = request.session['user_id']
+           
+        else:
+            return redirect('/')
+        
+        question=Questions.objects.get(id=pk)
+
+        if request.POST:
+            question.question=request.POST['question']
+            question.save()
+            messages.success(request,'Post edited successfully')
+            return redirect("profilepage")   
+            
+    else:
+        return redirect('/')
 
