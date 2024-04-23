@@ -1,0 +1,29 @@
+
+.main-heading{
+    color: rgb(0, 0, 0);
+}
+
+#sec1{
+    background-color: rgb(0, 0, 0);
+    color: white;
+}
+
+
+
+/* CSS for the alert box */
+.animated-alert {
+    animation: slideInFromRight 0.5s ease forwards;
+   
+}
+
+/* Keyframes for the slide-in animation */
+@keyframes slideInFromRight {
+    0% {
+        transform: translateX(100%); /* Start from outside the viewport on the right */
+        opacity: 0;
+    }
+    100% {
+        transform: translateX(0); /* Move to original position */
+        opacity: 1;
+    }
+}

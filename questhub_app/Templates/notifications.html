@@ -1,0 +1,93 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block title %}
+QuestHub-Notifications
+{% endblock %}
+
+{% block body %}
+
+<section id="section1">
+    <div class="container mt-lg-2">
+        {% include 'navbar.html' %}
+    </div>
+    
+</section>
+
+<section id="2">
+    <div class="container mt-5">
+        <div class="row">
+            <div class="col-md-2"></div>
+            <div class="col-md-8"> 
+                <div class="card shadow p-3 mb-5 bg-body-tertiary rounded">
+                    
+                    <div class="card-body">
+                        {% if new_notifications %}
+                        <h5 class="fw-bold">Latest</h5>
+                        {% for i in new_notifications %}
+                        <div class="row mb-5">
+                            <div class="col-2">
+                                {% if i.profile_picture %}
+                                <img src="{{ i.profile_picture.url }}" alt="Profile Picture" width="96" height="96" class="rounded-circle mt-3">
+                                {% else %}
+                                <img src="{% static 'images/dp.jpg' %}" alt="Profile Picture" width="96" height="96" class="rounded-circle mt-3">
+                                {% endif %}  
+                            </div>
+                            
+                            <div class="col-6">
+                               <p class="mt-5 font-monospace fw-bold"> {{i.message}}</p>
+                            </div>
+                            <div class="col-4 text-end">
+                                <p class="mt-5 font-monospace text-black-50 ms-1">{{i.date}} <span>{{i.time}}</span><p>
+                            </div>
+                        </div>
+                        {% endfor %}
+                        {% endif %}
+
+                        {% if  notifications %}
+                        <h5 class="fw-bold mt-2">Older</h5>
+                        {% for i in notifications %}
+                        <div class="row">
+                            <div class="col-2">
+                                {% if i.profile_picture %}
+                                <img src="{{ i.profile_picture.url }}" alt="Profile Picture" width="96" height="96" class="rounded-circle mt-3">
+                                {% else %}
+                                <img src="{% static 'images/dp.jpg' %}" alt="Profile Picture" width="96" height="96" class="rounded-circle mt-3">
+                                {% endif %}  
+                            </div>
+                            
+                            <div class="col-6">
+                               <p class="mt-5 font-monospace fw-bold"> {{i.message}}</p>
+                            </div>
+                            <div class="col-4 text-end">
+                                <p class="mt-5 font-monospace text-black-50 ms-1">{{i.date}} <span>{{i.time}}</span><p>
+                            </div>
+                        </div>
+                        {% endfor %}
+                        {% endif %}
+
+                        {% if not new_notifications.exists and not notifications.exists %}
+                            <p class="mt-3 font-monospace fw-bold">No notifications</p>
+                        {% endif %}
+                       
+                      
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-2"></div>
+        </div>
+    </div>
+
+</section>
+
+<section id="footer" class="mt-5">
+    {% include 'footer.html' %}
+</section>
+
+
+
+
+
+
+
+
+{% endblock %}

@@ -1,0 +1,125 @@
+{% extends 'admin_base.html' %}
+{% load static %}
+
+<!-- title for the dashboard page -->
+{% block title %}
+Admin Dashboard
+{% endblock %}
+
+<!-- css link for dashboard page -->
+{% block link %}
+<link rel="stylesheet"  href="{% static 'admin/css/admin_dashboard.css' %}">
+{% endblock %}
+
+<!-- contents for dashboard page -->
+{% block content %}
+<div class="container-fluid px-4">
+    <ol class="breadcrumb mt-3">
+        <li class="breadcrumb-item"><a href="{% url  'admin_dashboard' %}">Dashboard</a></li>
+        <li class="breadcrumb-item active">Users</li>
+    </ol>
+    <div class="container">
+        <div class="row mt-1">
+            <div class="col-md-4"></div>
+            <div class="col-md-4"></div>
+            <div class="col-md-4">
+                {% for message in messages %}
+                <div class="alert alert-success alert-dismissible fade show animated-alert" role="alert">
+                    <strong>Success <i class="fa fa-check-circle"></i></strong> <span class="ms-2">{{message}}</span>
+                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+    <div class="row-12">
+        <div class="container mt-5">
+            <h3 class=" mb-4">Users</h1>
+            <div class="table-responsive">
+                <table class="table table-dark table-hover">
+                    <thead>
+                        <tr style="border-bottom: solid 1px rgba(255, 255, 255, 0.3);">
+                            <th>Name</th>
+                            <th>Username</th>
+                            <th>Email</th>
+                            <th>Action</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for user in users %}
+                        <tr  style="border-bottom: solid 1px rgba(255, 255, 255, 0.3);">
+                            <td>
+                                {% if user.profile_picture %}
+                                    <img src="{{ user.profile_picture.url }}" alt="{{ user.name }}'s Profile Picture" class="rounded-circle" width="45" height="50">
+                                {% else %}
+                                <img class="img-fluid rounded-circle" src="{% static 'images/dp.jpg' %}" class="rounded-circle" width="45" height="50" alt="Profile Picture" >
+                                {% endif %}
+                                <span class="ms-1">{{ user.name }}</span>
+                            </td>
+                            <td>{{ user.username }}</td>
+                            <td>{{ user.email }}</td>
+                            
+                            <td>
+                                <div class="btn-group" role="group" aria-label="User Actions">
+                                    <a class="btn btn-outline-success me-2" href="{% url 'user_details' user.id %}">
+                                        <i class="fa fa-eye"></i> <!-- View Icon -->
+                                    </a>
+                                    <form action="{% url 'delete_user' user.id %}" method="POST" onsubmit="return confirm('Are you sure you want to delete this user?');">
+                                        {% csrf_token %}
+                                        <button type="submit" class="btn btn-outline-danger">
+                                            <i class="fa fa-trash"></i> <!-- Delete Icon -->
+                                        </button>
+                                    </form>
+                                </div>
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+<style>
+    .table {
+        border: 2px solid #343a40; /* Dark grey border */
+    }
+
+    .table-shadow {
+        box-shadow: 0 4px 6px rgba(3, 2, 2, 0.989); /* Shadow effect */
+    }
+
+    .btn-view {
+        background-color: #007bff; /* Blue color for view button */
+    }
+
+    .btn-delete {
+        background-color: #dc3545; /* Red color for delete button */
+    }
+
+</style>
+
+<style>
+          
+    /* CSS for the alert box */
+    .animated-alert {
+        animation: slideInFromRight 0.5s ease forwards;
+        
+    }
+    
+    /* Keyframes for the slide-in animation */
+    @keyframes slideInFromRight {
+        0% {
+        transform: translateX(100%); /* Start from outside the viewport on the right */
+        opacity: 0;
+        }
+        100% {
+        transform: translateX(0); /* Move to original position */
+        opacity: 1;
+        }
+    }
+
+    
+          
+</style>

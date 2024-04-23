@@ -38,6 +38,7 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'questhub_app',
+    'Admin'
 ]
 
 MIDDLEWARE = [
@@ -77,7 +78,7 @@ WSGI_APPLICATION = 'questhub_project.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql',
-        'NAME': 'Questhub1',
+        'NAME': 'Questhub3',
         'USER': 'root',
         'PASSWORD':'',
         'HOST': 'localhost',
@@ -132,5 +133,7 @@ MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/4.2/ref/settings/#default-auto-field
+
+LOGIN_URL='loginpage'
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'

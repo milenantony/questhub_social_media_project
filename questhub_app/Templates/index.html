@@ -68,12 +68,7 @@ QuestHub-Home
                 <div class="card shadow p-3 mb-5 bg-body-tertiary rounded">
                     {% for question in questions %}
                     <div class="card-body">
-                        <div class="row">
-                            <div class="col-11"></div>
-                            <div class="col-1">
-                                <span><i class="fas fa-ellipsis-v "></i></span>
-                            </div>
-                        </div>
+                        
                         
                         <div class="chip" for="input_field">
                             {% if question.user.profile_picture %}
@@ -128,7 +123,7 @@ QuestHub-Home
                 <div class="card shadow p-3 mb-5 bg-body-tertiary rounded">
                     
                     <div class="card-body">
-                       <h5>No Posts yet..!</h5>
+                       <h5 class="fw-bold font-monospace ">No Posts yet..!</h5>
                     </div>
                     
                     

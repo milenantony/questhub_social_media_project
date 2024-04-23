@@ -36,3 +36,12 @@ class Answer(models.Model):
 
     def like_count(self):
         return self.likes.count()
+
+class Notifications(models.Model):
+    user = models.ForeignKey(Registerprofile, on_delete=models.CASCADE, related_name='notifications')
+    message = models.TextField()
+    profile_picture=models.ImageField(null=True,blank=True,upload_to='images')
+    date = models.DateField(auto_now_add=True)
+    time = models.TimeField(auto_now_add=True)
+    is_read = models.BooleanField(default=0, null=True, blank=True)
+

@@ -1,0 +1,26 @@
+
+
+.main-heading{
+    color: rgb(66, 28, 82);
+}
+.tablestyle{
+    background-color: rgb(66, 28, 82);
+    color: white;
+
+}
+.borderstyle{
+    border-bottom: 1px solid rgba(255, 255, 255, 0.3);
+}
+.btn2{
+    background-color: rgb(255, 255, 255);
+    color: rgb(66, 28, 82);
+    padding: 5px;
+    border-radius: 3px;
+    text-decoration: none;
+}
+.btn2:hover{
+    background-color: rgb(255, 255, 255);
+    color: rgb(66, 28, 82);
+    padding: 5px;
+    border-radius: 3px;
+}

@@ -23,7 +23,7 @@ QuestHub-Home
        
       </div>
     </div>
-</div>
+  </div>
 </section>
 
 <section id="section2">
@@ -45,18 +45,18 @@ QuestHub-Home
             </div> 
             <div class="col-md-8">
               <div class="card-body">
-                <h5 class="card-title mb-4" style="font-weight: bold; color: #1a1a1a; font-size: 24px;"> Profile</h5>
-                <p class="card-text" style="color: #333;"><strong>Name:</strong> {{userdata.name}}</p>
-                <p class="card-text" style="color: #333;"><strong>Username:</strong> {{userdata.username}}</p>
-                <p class="card-text" style="color: #333;"><strong>Bio:</strong> {{userdata.bio}}</p>
-                <p class="card-text" style="color: #333;"><strong>Email:</strong> {{userdata.email}}</p>
-                <p class="card-text" style="color: #333;"><strong>Gender:</strong> {{userdata.gender}}</p>
-                <p class="card-text" style="color: #333;"><strong>Phone number:</strong> {{userdata.phone_number}}</p>
-                <p class="card-text" style="color: #333;"><strong>Place:</strong> {{userdata.place}}</p>
-                <a class="btn btn-outline-danger rounded-3" href="{% url 'edit_profile' %}">Edit Profile</a>
+                  <h5 class="card-title mb-4 font-weight-bold">Profile</h5>
+                  <p class="card-text">Name: <span class="fw-bold">{{ userdata.name }}</span></p>
+                  <p class="card-text">Username: <span class="fw-bold">{{ userdata.username }}</span></p>
+                  <p class="card-text">Bio: <span class="fw-bold">{{ userdata.bio }}</span></p>
+                  <p class="card-text">Email: <span class="fw-bold">{{ userdata.email }}</span></p>
+                  <p class="card-text">Gender: <span class="fw-bold">{{ userdata.gender }}</span></p>
+                  <p class="card-text">Phone number: <span class="fw-bold">{{ userdata.phone_number }}</span></p>
+                  <p class="card-text">Place: <span class="fw-bold">{{ userdata.place }}</span></p>
+                  <a class="btn btn-outline-danger rounded-3" href="{% url 'edit_profile' %}">Edit Profile</a>
               </div>
-            </div>
           </div>
+        </div>
         </div>
 
       </div>
@@ -65,6 +65,7 @@ QuestHub-Home
   </div>
 </section>
 
+
 <section id="section3">
   <div class="container">
     <div class="row mt-1 mb-5">
@@ -72,69 +73,59 @@ QuestHub-Home
       <div class="col-lg-8">
         <div class="card shadow mb-5 bg-body-tertiary rounded">
           <div class="card-header">
-            <ul class="nav nav-pills card-header-pills p-3">
-              <li class="nav-item">
-                <a class="nav-link active" href="#posts">Posts</a>
+            <ul class="nav nav-pills mb-3" id="pills-tab" role="tablist">
+              <li class="nav-item" role="presentation">
+                <button class="nav-link active" id="pills-home-tab" data-bs-toggle="pill" data-bs-target="#pills-home" type="button" role="tab" aria-controls="pills-home" aria-selected="true">Posts</button>
               </li>
-              <li class="nav-item">
-                <a class="nav-link" href="#answers">Answers</a>
-              </li>
-
-              
             </ul>
-          </div>
-          
-          <div class="card-body ">
-            <div class="tab-content">
-              <!-- for posts -->
-              {% for question in questions %}
-              <div class="box p-3 " id="#posts">
-                <div class="row ">
-                  <div class="col-11"></div>
-                  <div class="col-1">
-                    <div class="dropdown">
-                      <span class="ellipsis">
-                        <i class="fas fa-ellipsis-v"></i>
-                      </span>
-                      <div class="dropdown-content">
-                        <a href="" data-bs-toggle="modal" data-bs-target="#editpostmodal{{question.id}}">Edit</a>
-                        <a href="{% url 'delete_post' question.id %}">Delete</a>
+            <div class="tab-content" id="pills-tabContent">
+              <div class="tab-pane fade show active" id="pills-home" role="tabpanel" aria-labelledby="pills-home-tab" tabindex="0">
+                <div class="card-body ">
+                    <!-- for posts -->
+                    {% if questions %}
+                    {% for question in questions %}
+                    <div class="box p-3 " id="#posts">
+                      <div class="row ">
+                        <div class="col-11"></div>
+                        <div class="col-1">
+                          <div class="dropdown">
+                            <span class="ellipsis">
+                              <i class="fas fa-ellipsis-h"></i>
+                            </span>
+                            <div class="dropdown-content">
+                              <a href="" data-bs-toggle="modal" data-bs-target="#editpostmodal{{question.id}}">Edit</a>
+                              <a href="{% url 'delete_post' question.id %}">Delete</a>
+                            </div>
+                          </div>                    
+                        </div>
                       </div>
-                    </div>                    
-                  </div>
-                </div>
-              
-                <div class="chip" for="input_field">
-                  {% if userdata.profile_picture %}
-                  <img src="{{ userdata.profile_picture.url }}" alt="Profile Picture" width="96" height="96">
-                  {% else %}
-                  <img src="{% static 'images/dp.jpg' %}" alt="Profile Picture" width="96" height="96">
-                  {% endif %}
-                  <span class="text-danger">{{question.user.username}}</span>
                     
-                </div>
-              
-                <p class="ms-2" style="font-size: small;">Posted on {{question.date}}</p>
-                <h6><strong>{{question.question}}</strong></h6>
-                <div class="row mt-3">
-                  <div class="col-md-6">
-                    {% if question.user.id == user_id  %}
-                    <button class="btn btn-outline-danger btn-sm" disabled><i class="fa fa-pen-alt"></i>Answer</button>
+                      <div class="chip" for="input_field">
+                        {% if userdata.profile_picture %}
+                        <img src="{{ userdata.profile_picture.url }}" alt="Profile Picture" width="96" height="96">
+                        {% else %}
+                        <img src="{% static 'images/dp.jpg' %}" alt="Profile Picture" width="96" height="96">
+                        {% endif %}
+                        <span class="text-danger">{{question.user.username}}</span>
+                          
+                      </div>
+                    
+                      <p class="ms-2" style="font-size: small;">Posted on {{question.date}}</p>
+                      <h6><strong>{{question.question}}</strong></h6>
+                      <div class="row mt-3">
+                        
+                        <div class="col-md-6">
+                          <a href="{% url 'view_answers' question.id %}" style="text-decoration: none;"><button class="btn btn-outline-danger btn-sm">View Answers</button></a>
+                        </div>
+                      </div>
+                    </div>
+                    {% endfor %}
                     {% else %}
-                    <button type="button" class="btn btn-outline-danger btn-sm" data-bs-toggle="modal" data-bs-target="#answermodal{{question.id}}">
-                      <i class="fa fa-pen-alt"></i>Answer
-                    </button>
+                    <p class="fw-bold font-monospace mt-3">No Posts yet...!</p>
                     {% endif %}
                   </div>
-                  <div class="col-md-6">
-                    <a href="{% url 'view_answers' question.id %}" style="text-decoration: none;"><button class="btn btn-outline-danger btn-sm">View Answers</button></a>
-                  </div>
-                </div>
               </div>
-              {% endfor %}
-
-              
-
+          </div>
             </div>
           </div>
           <hr>
@@ -145,6 +136,10 @@ QuestHub-Home
     </div>
   </div>
 
+</section>
+
+<section id="footer" class="mt-5">
+  {% include 'footer.html' %}
 </section>
 
 
@@ -160,7 +155,6 @@ QuestHub-Home
         </div>
         <div class="row mb-3">
           <div class="col-md-8"></div>
-          <!-- <div class="col-md-1"></div> -->
           <div class="col-md-3">
             <button type="submit" class="btn btn-outline-danger btn-sm text-center">Post<i class="fas fa-paper-plane ms-2"></i></button>
           </div>
@@ -172,7 +166,28 @@ QuestHub-Home
 </div>
 {% endfor %}
 
-
+<!-- modal for answer edit submission -->
+{% for answer in answers %}
+<div class="modal fade" id="editanswermodal{{ answer.id }}" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content">
+      <form method="post" action="">
+        {% csrf_token %}
+        <div class="modal-body">
+          <textarea name="answer" class="form-control mt-2" id="" rows="2" required>{{ answer.answer_text }}</textarea>
+        </div>
+        <div class="row mb-3">
+          <div class="col-md-8"></div>
+          <div class="col-md-3">
+            <button type="submit" class="btn btn-outline-danger btn-sm text-center">Post<i class="fas fa-paper-plane ms-2"></i></button>
+          </div>
+          <div class="col-md-1"></div>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+{% endfor %}
 
 <style>
   .nav-link{

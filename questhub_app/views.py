@@ -5,7 +5,8 @@ from django.core.exceptions import ObjectDoesNotExist
 from django.http import JsonResponse
 from django.shortcuts import get_object_or_404
 from datetime import date
-
+from django.contrib.auth.models import User, auth
+from django.contrib.auth import authenticate,logout,login
 
 # Create your views here.
 
@@ -46,7 +47,14 @@ def loginpage(request):
 def userlogin(request):
     if request.POST:
         username = request.POST.get('uname', '')  
-        password = request.POST.get('pswd', '')  
+        password = request.POST.get('pswd', '')
+        user = authenticate(username=username, password=password)
+
+        if user is not None and user.is_staff:
+            login(request, user)
+            return redirect('admin_dashboard')
+
+
 
         try:
             log_details = Registerprofile.objects.get(username=username, password=password)
@@ -75,6 +83,13 @@ def userlogin(request):
 
     return redirect('loginpage')
 
+#------------------ Logout Section-------------------------
+
+def admin_logout(request):
+  auth.logout(request)
+  return redirect('loginpage') 
+
+
 def userlogout(request):
     request.session.pop('user_id', None)
     messages.success(request,'Logout successfully')
@@ -93,14 +108,19 @@ def index(request):
         
         userdata = Registerprofile.objects.get(id=user_id)
         questions=Questions.objects.all().order_by('-date','-time')
+        noti_count=userdata.notifications.filter(is_read=0).count()
+        
 
         context={
             'userdata':userdata,
             'questions':questions,
             'user_id':user_id,
+            'noti_count':noti_count,
         }
 
-    return render(request, 'index.html', context)
+        return render(request, 'index.html', context)
+    else:
+        return redirect('/')
 
 def filter_today(request):
     if 'user_id' in request.session:
@@ -109,11 +129,14 @@ def filter_today(request):
         
         today = str(date.today())
         questions = Questions.objects.filter(date=today).order_by('-date', '-time')
+        noti_count=userdata.notifications.filter(is_read=0).count()
+
 
         context = {
             'userdata': userdata,
             'questions': questions,
             'user_id': user_id,
+            'noti_count':noti_count,
         }
         return render(request, 'index.html', context)
     else:
@@ -125,11 +148,13 @@ def filter_myposts(request):
         userdata = Registerprofile.objects.get(id=user_id)
         
         questions = Questions.objects.filter(user=userdata).order_by('-date', '-time')
+        noti_count=userdata.notifications.filter(is_read=0).count()
 
         context = {
             'userdata': userdata,
             'questions': questions,
             'user_id': user_id,
+            'noti_count':noti_count,
         }
         return render(request, 'index.html', context)
     else:
@@ -184,6 +209,10 @@ def submit_answer(request,pk):
             data=Answer(answer_text=answer_text,user=user,question=question)
             data.save()
             messages.success(request,'Answered')
+            noti=f'{user.username} answered your question'
+            pic=user.profile_picture
+            notification=Notifications(user=question.user,message=noti,profile_picture=pic)
+            notification.save()
             return redirect('index')
         
     else:
@@ -203,16 +232,19 @@ def view_answers(request,pk):
         userdata = Registerprofile.objects.get(id=user_id)
         question=Questions.objects.get(id=pk)
         answers=Answer.objects.filter(question=question).order_by('-date','-time')
-        print(answers)
+        noti_count=userdata.notifications.filter(is_read=0).count()
+        
 
         context={
             'userdata':userdata,
             'question':question,
             'answers':answers,
             'user_id':user_id,
+            'noti_count':noti_count,
         }
-    return render(request,'answers.html',context)
-
+        return render(request,'answers.html',context)
+    else:
+        return redirect('/')
 
 # like answers
 
@@ -225,6 +257,7 @@ def like_answer(request, answer_id):
             return redirect('/')
         
         userdata = Registerprofile.objects.get(id=user_id).id
+        user = Registerprofile.objects.get(id=user_id)
         if request.method == 'GET' :
             try:
                 answer = get_object_or_404(Answer, id=answer_id)
@@ -238,11 +271,18 @@ def like_answer(request, answer_id):
 
                 like_count = answer.like_count()
 
+                noti=f'{user.username} liked your answer'
+                pic=user.profile_picture
+                notification=Notifications(user=answer.user,message=noti,profile_picture=pic)
+                notification.save()
+
                 return JsonResponse({'success': True, 'like_count': like_count})
             except Answer.DoesNotExist:
                 return JsonResponse({'success': False, 'error': 'Answer not found'})
 
-    return JsonResponse({'success': False, 'error': 'Invalid request'})
+        return JsonResponse({'success': False, 'error': 'Invalid request'})
+    else:
+        return redirect('/')
 
 def profilepage(request):
     if 'user_id' in request.session:
@@ -254,13 +294,19 @@ def profilepage(request):
         
         userdata = Registerprofile.objects.get(id=user_id)
         questions = Questions.objects.filter(user=userdata).order_by('-date', '-time')
+        answers=Answer.objects.filter(user=userdata).order_by('-date','-time')
+        noti_count=userdata.notifications.filter(is_read=0).count()
+
 
         
         context={
             'userdata':userdata,
             'user_id':user_id,
             'questions':questions,
+            'answers':answers,
+            'noti_count':noti_count,
         }
+       
         return render(request,'profile.html',context)
     else:
         return redirect('/')
@@ -274,10 +320,12 @@ def edit_profile(request):
             return redirect('/')
         
         userdata = Registerprofile.objects.get(id=user_id)
-        
+        noti_count=userdata.notifications.filter(is_read=0).count()
+
         context={
             'userdata':userdata,
             'user_id':user_id,
+            'noti_count':noti_count, 
         }
         return render(request,'edit_profile.html',context)
     else:
@@ -306,7 +354,6 @@ def edit_profile_save(request):
             userdata.place=request.POST['place']
             if new_pic:
                 userdata.profile_picture=new_pic
-            print(new_pic)
             userdata.save()
             messages.success(request,'Profile Updated')
             return redirect("profilepage")   
@@ -350,3 +397,27 @@ def edit_post(request,pk):
     else:
         return redirect('/')
 
+
+def notifications(request):
+    if 'user_id' in request.session:
+        if request.session.has_key('user_id'):
+            user_id = request.session['user_id']
+           
+        else:
+            return redirect('/')
+        
+        today=date.today()
+        userdata = Registerprofile.objects.get(id=user_id)
+        new_notifications=userdata.notifications.filter(date=today).order_by('-date','-time')
+        notifications=userdata.notifications.filter(date__lt=today).order_by('-date','-time')
+        read_notifications=userdata.notifications.update(is_read=1)
+        context={
+            'userdata':userdata,
+            'new_notifications':new_notifications,
+            'notifications':notifications,
+            'user_id':user_id,
+        }
+
+        return render(request, 'notifications.html', context)
+    else:
+        return redirect('/')

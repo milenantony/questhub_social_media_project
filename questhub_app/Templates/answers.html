@@ -34,8 +34,12 @@ QuestHub-QA
                     
                     <div class="card-body">
                         <div class="chip">
-                            <img src="{% static 'images/dp.jpg' %}" alt="Person" width="96" height="96">
-                            <span class="text-danger">{{question.user.username}}</span>
+                            {% if question.user.profile_picture %}
+                            <img src="{{ question.user.profile_picture.url }}" alt="Profile Picture" width="96" height="96">
+                            {% else %}
+                            <img src="{% static 'images/dp.jpg' %}" alt="Profile Picture" width="96" height="96">
+                            {% endif %}
+                            <span class="text-danger">{{question.user.username}}</span> 
                         </div>
                         <p class="ms-2" style="font-size: small;">Posted on {{question.date}}</p>
                         <h6><strong>{{question.question}}</strong></h6>
@@ -58,8 +62,12 @@ QuestHub-QA
                     {% for answer in answers %}
                     <div class="card-body">
                         <div class="chip">
-                            <img src="{% static 'images/dp.jpg' %}" alt="Person" width="96" height="96">
-                            <span class="text-danger">{{answer.user.username}}</span>
+                            {% if answer.user.profile_picture %}
+                            <img src="{{ answer.user.profile_picture.url }}" alt="Profile Picture" width="96" height="96">
+                            {% else %}
+                            <img src="{% static 'images/dp.jpg' %}" alt="Profile Picture" width="96" height="96">
+                            {% endif %}
+                            <span class="text-danger">{{answer.user.username}}</span> 
                         </div>
                         <p class="ms-2" style="font-size: small;">Posted on {{answer.date}}</p>
                         <h6><strong>{{answer.answer_text}}</strong></h6>
@@ -90,9 +98,7 @@ QuestHub-QA
             <div class="col-md-2"></div>
         </div>
     </div>
-    {% endif %}
-
-    
+    {% endif %} 
 </section>
 
 <section id="footer" class="mt-5">
@@ -151,8 +157,8 @@ QuestHub-QA
 
             $.ajax({
                 type: "GET",
-                url: `/Like-answer/${answerId}/`,  
-                data: {},
+                url: `/like-answer/${answerId}/`,  
+                dataType: 'json', // Specify JSON dataType for response parsing
                 success: function(data) {
                     if (data.success) {
                         likeCountElement.text("Likes: " + data.like_count);

@@ -59,14 +59,13 @@ Register
               
               <div class="form-group">
                 <label for="uname" class="text-white">Email*</label>
-                <input type="email" class="form-control" style="background: transparent;color: white;" id="email"  name="email" required>
+                <input type="email" class="form-control" style="background: transparent;color: white;" id="email" pattern="^[^\s@]+@[^\s@]+\.[^\s@]+$" title="Email should be in the format 'example@gmail.com'" name="email" required>
                     
               </div><br>
                 
               <div class="form-group">
                 <label for="pwd"  class="text-white">Password*</label>
-                <input type="password"  class="form-control" style="background: transparent; color: white;" id="pwd" name="pswd" required>
-                    
+                <input type="password"  class="form-control" style="background: transparent; color: white;" id="pwd" pattern="(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,}"  title="Password must be at least 8 characters long and include at least one digit, one lowercase letter, and one uppercase letter." name="pswd" required>
               </div><br>
                   
               <button type='submit' class="btn btn-outline-dark" style=" color: rgb(255, 255, 255);margin-bottom: 5px;">Register</button>
